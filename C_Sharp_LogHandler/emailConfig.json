@@ -1,0 +1,7 @@
+﻿{
+  "SmtpServer": "smtp.gmail.com",
+  "Port": "465",
+  "Email": "itrimsl8696@gmail.com",
+  "Password": "ulgmjpcsszbujfya",
+  "EmailList": ["itrimsl8696@gmail.com"]
+}
