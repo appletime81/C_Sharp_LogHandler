@@ -1,7 +1,8 @@
 ﻿{
-  "SmtpServer": "smtp.gmail.com",
-  "Port": "465",
-  "Email": "itrimsl8696@gmail.com",
-  "Password": "ulgmjpcsszbujfya",
+  "SmtpServer": "email-smtp.ap-northeast-1.amazonaws.com",
+  "Port": 465,
+  "Email": "AKIA3ASPE5JZD2KXPZV4",
+  "Password": "BOGTNBFJrW2ee0lHw3kPDtRrdDweWvqXGtgTN967hkff",
+  "SenderEmail": "aivss-service@chtiss-com.awsapps.com",
   "EmailList": ["itrimsl8696@gmail.com"]
 }

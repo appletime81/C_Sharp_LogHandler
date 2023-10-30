@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Net;
-using System.Net.Mail;
 using System.Text.Json;
 using System.IO;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 public static class EmailSender
 {
@@ -12,32 +12,38 @@ public static class EmailSender
         var jsonString = File.ReadAllText(jsonConfigPath);
         var config = JsonSerializer.Deserialize<EmailConfig>(jsonString);
 
-        using var message = new MailMessage();
-        message.From = new MailAddress(config.SenderEmail);
+        var message = new MimeMessage();
+        message.From.Add(MailboxAddress.Parse(config.SenderEmail));
         foreach (var email in config.EmailList)
         {
-            message.To.Add(email);
+            message.To.Add(MailboxAddress.Parse(email));
         }
 
         message.Subject = subject;
-        message.Body = body;
+        message.Body = new TextPart("html") { Text = body };
 
         if (!string.IsNullOrEmpty(attachmentFilePath) && File.Exists(attachmentFilePath))
         {
-            var attachment = new Attachment(attachmentFilePath);
-            message.Attachments.Add(attachment);
+            var attachment = new MimePart("application", "octet-stream")
+            {
+                Content = new MimeContent(File.OpenRead(attachmentFilePath)),
+                ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                ContentTransferEncoding = ContentEncoding.Base64,
+                FileName = Path.GetFileName(attachmentFilePath)
+            };
+            var multipart = new Multipart("mixed");
+            multipart.Add(message.Body);
+            multipart.Add(attachment);
+            message.Body = multipart;
         }
 
-        using var client = new SmtpClient(config.SmtpServer, config.Port)
-        {
-            Credentials = new NetworkCredential(config.Email, config.Password),
-            EnableSsl = true,
-            UseDefaultCredentials = false
-        };
-
+        using var client = new SmtpClient();
         try
         {
+            client.Connect(config.SmtpServer, config.Port, true); // The 'true' specifies SSL
+            client.Authenticate(config.Email, config.Password);
             client.Send(message);
+            client.Disconnect(true);
         }
         catch (Exception ex)
         {
