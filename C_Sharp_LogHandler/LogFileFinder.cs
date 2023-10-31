@@ -6,8 +6,10 @@ namespace C_Sharp_LogHandler
     {
         public static string[] FindLogFiles(string relativeFolderPath)
         {
-            var currentDirectory = Directory.GetCurrentDirectory();
-            Console.WriteLine(currentDirectory);
+            // var currentDirectory = Directory.GetCurrentDirectory();
+            // /home/jd/scheduler/scheduler-cloud-logs
+            var currentDirectory = "/home/jd/scheduler";
+            // Console.WriteLine(currentDirectory);
             var folderPath = Path.Combine(currentDirectory, relativeFolderPath);
 
             //抓取當天日期的前一天
