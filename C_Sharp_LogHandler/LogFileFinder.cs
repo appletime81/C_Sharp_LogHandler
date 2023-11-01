@@ -8,15 +8,16 @@ namespace C_Sharp_LogHandler
         {
             // var currentDirectory = Directory.GetCurrentDirectory();
             // /home/jd/scheduler/scheduler-cloud-logs
-            var currentDirectory = "/home/jd/scheduler";
+            var targetDirectory = "/home/jd/scheduler";
             // Console.WriteLine(currentDirectory);
-            var folderPath = Path.Combine(currentDirectory, relativeFolderPath);
+            var folderPath = Path.Combine(targetDirectory, relativeFolderPath);
 
             //抓取當天日期的前一天
             var yesterday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
             
             // return yyyy-MM-dd.log files
             return Directory.GetFiles(folderPath, $"{yesterday}.log", SearchOption.AllDirectories);
+            // return Directory.GetFiles(folderPath, "2023-09-24.log", SearchOption.AllDirectories);
         }
     }
 }
