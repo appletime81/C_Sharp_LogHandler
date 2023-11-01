@@ -57,7 +57,6 @@ public class StatisticsCount
         return errorStats;
     }
 
-    // generate html stats report
     public static string GenerateHTMLFromStats(Dictionary<string, int> errorStats)
     {
         var totalErrors = 0;
@@ -76,39 +75,44 @@ public class StatisticsCount
             "#556B2F", "#FF8C00", "#9932CC", "#8B0000", "#E9967A", // Earthy & rich
             "#8FBC8F", "#483D8B", "#2F4F4F", "#00CED1", "#9400D3", // Muted shades
             "#FF1493", "#00BFFF", "#696969", "#1E90FF", "#B22222"
-        }; // Sample colors, you can add more if needed
+        };
         var sb = new StringBuilder();
 
         sb.AppendLine("<!DOCTYPE html>");
         sb.AppendLine("<html lang=\"en\">");
-        // ... rest of the head content ...
-
+        sb.AppendLine("<head>");
+        sb.AppendLine("    <meta charset=\"UTF-8\">");
+        sb.AppendLine("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+        sb.AppendLine("    <title>Error Events Statistics</title>");
+        sb.AppendLine("</head>");
         sb.AppendLine(
-            "<body style=\"font-family: 'Arial', sans-serif; background-color: #edf2f7; padding: 20px; color: #2d3748;\">");
+            "<body style=\"font-family: 'Verdana', sans-serif; background-color: #edf2f7; color: #2d3748; text-align: center;\">");
         sb.AppendLine(
-            "<h2 style=\"text-align: center; margin-bottom: 20px; font-size: 24px; font-weight: 700;\">Error Events Statistics</h2>");
+            "<h2 style=\"margin-bottom: 30px; font-size: 26px; font-weight: bold;\">Error Events Statistics</h2>");
         sb.AppendLine(
-            "<div id=\"statistics\" style=\"max-width: 600px; margin: 0 auto; padding: 20px; background-color: #fff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border-radius: 0.25rem;\">");
+            "<table id=\"statistics\" align=\"center\" style=\"width:600px; margin:0 auto; padding:20px; background-color:#fff; border-collapse: collapse;\" cellspacing=\"0\" cellpadding=\"0\">");
 
         int colorIndex = 0;
         foreach (var error in errorStats)
         {
             var percentage = ((double)error.Value / totalErrors) * 100;
-            sb.AppendLine("<div style=\"margin-bottom: 10px;\">");
-            sb.AppendLine($"<div style=\"font-weight: bold; margin-bottom: 5px;\">{error.Key}</div>");
+
+            sb.AppendLine("<tr style=\"font-size: 16px;\">");
             sb.AppendLine(
-                $"<div style=\"background-color: {colors[colorIndex % colors.Length]}; height: 20px; width: {percentage}%;\"></div>");
+                $"<td style=\"font-weight: bold; padding-bottom: 20px; padding-top: 20px; width: 50%; text-align: left;\">{error.Key}</td>");
             sb.AppendLine(
-                $"<div style=\"margin-top: 5px;\">{percentage.ToString("0.##")}% ({error.Value} times) <br><br></div>");
-            sb.AppendLine("</div>");
+                $"<td style=\"width: 30%; padding: 0;\"><table style=\"border-collapse: collapse; width: 100%;\"><tr><td style=\"background-color: {colors[colorIndex % colors.Length]}; height: 20px; width:{percentage.ToString("0.##")}%;\"></td><td style=\"background-color: #edf2f7;\"></td></tr></table></td>");
+            sb.AppendLine(
+                $"<td style=\"font-size: 14px; padding-left: 20px; width: 20%; text-align: right;\">{percentage.ToString("0.##")}%<br><span style=\"font-size: 12px;\">({error.Value} events)</span></td>");
+            sb.AppendLine("</tr>");
 
             colorIndex++;
         }
 
-        sb.AppendLine("</div>");
+        sb.AppendLine("</table>");
         sb.AppendLine("</body>");
         sb.AppendLine("</html>");
-
+        Console.WriteLine(sb.ToString());
         return sb.ToString();
     }
 }
