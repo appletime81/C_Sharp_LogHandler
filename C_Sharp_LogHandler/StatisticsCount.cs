@@ -112,7 +112,7 @@ public class StatisticsCount
         sb.AppendLine("</table>");
         sb.AppendLine("</body>");
         sb.AppendLine("</html>");
-        Console.WriteLine(sb.ToString());
+        // Console.WriteLine(sb.ToString());
         return sb.ToString();
     }
 }
